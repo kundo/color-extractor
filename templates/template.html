@@ -1,0 +1,38 @@
+<html>
+<head>
+    <title>Automatic color extraction</title>
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <script>
+        const rgb2hex = (r, g, b) => {
+            var rgb = (r << 16) | (g << 8) | b
+            return '#' + rgb.toString(16).padStart(6, 0)
+        }
+        function copyColor(r, g, b) {
+            navigator.clipboard.writeText(rgb2hex(r, g, b))
+        }
+    </script>
+</head>
+<body>
+    <main>
+        <h1>Automatic color extraction</h1>
+        <form action="/" method="post">
+            <label for="url">Url:</label>
+            <input type="text" name="url" id="url" placeholder="skandia.se" value="{{ url }}" autocomplete="off">
+            <button type="submit" onclick="this.innerText = 'Extracting...'">Extract</button>
+        </form>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        <div class="colors">
+            {% for color in colors %}
+                <div class="color" style="background: rgb({{ color.rgb.r }}, {{ color.rgb.g }}, {{ color.rgb.b }})">
+                    <button onclick="copyColor({{ color.rgb.r }}, {{ color.rgb.g }}, {{ color.rgb.b }})">Copy</button>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
