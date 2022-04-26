@@ -20,7 +20,7 @@ async def start(request: Request):
     })
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.post("/", response_class=HTMLResponse)
 async def extract(request: Request):
     form = await request.form()
 
