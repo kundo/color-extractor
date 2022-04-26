@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -6,7 +6,6 @@ from urllib.parse import urlparse
 from pyppeteer import launch
 import colorgram
 from pathlib import Path
-from typing import Optional
 
 
 app = FastAPI()
@@ -21,7 +20,7 @@ async def start(request: Request):
     })
 
 
-@app.post("/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 async def extract(request: Request):
     form = await request.form()
 
@@ -44,7 +43,6 @@ async def extract(request: Request):
         await write_screenshot(url, path)
 
     colors = colorgram.extract(path, 6)
-    # colors = await extract_colors(path, 6)
 
     Path(path).unlink(missing_ok=True)
 
@@ -64,18 +62,3 @@ async def write_screenshot(url, path):
         "fullPage": True,
     })
     await browser.close()
-
-
-# async def extract_colors(path, num_colors):
-#     from PIL import Image
-#     from collections import Counter
-#     colors = Counter()
-#     im = Image.open(path).convert('RGB')
-#     for i in range(im.width):
-#         for j in range(im.height):
-#             h = im.getpixel((i, j))
-#             colors[h] += 1
-
-#     im.close()
-
-#     print(colors.most_common(num_colors))
