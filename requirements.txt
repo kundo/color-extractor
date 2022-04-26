@@ -3,3 +3,4 @@ fastapi[all]
 pyppeteer
 colorgram.py
 flake8
+gunicorn
