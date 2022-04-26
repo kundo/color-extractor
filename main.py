@@ -46,6 +46,8 @@ async def extract(request: Request):
     colors = colorgram.extract(path, 6)
     # colors = await extract_colors(path, 6)
 
+    Path(path).unlink(missing_ok=True)
+
     return templates.TemplateResponse("template.html", {
         "request": request,
         "url": url.replace("https://", "").replace("http://", ""),
